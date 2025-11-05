@@ -1,0 +1,721 @@
+/* ==================== リセット & ベース ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f8f9fa;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --accent-color: #667eea;
+  --border-color: #e2e8f0;
+  --danger-color: #e53e3e;
+  --shadow: 0 4px 6px rgba(0,0,0,0.1);
+  --transition: all 0.3s ease;
+}
+
+body.dark-mode {
+  --bg-primary: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #1a202c;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --border-color: #4a5568;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==================== カスタムチェックボックス ==================== */
+input[type="checkbox"] {
+  /* 非表示ではなく外観を消す */
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:hover {
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: transparent;
+  transform: scale(1.1);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.4);
+}
+
+/* === ナビゲーション === */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  z-index: 1000;
+  transition: var(--transition);
+}
+
+body.dark-mode nav { background: rgba(45,55,72,0.95); }
+
+#logo h1 {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+#logo span { color: #ed8936; }
+
+#nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-button {
+  background: var(--bg-tertiary);
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.icon-button:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+#datetime {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+/* === ハンバーガーメニュー === */
+#nav_switch {
+  width: 48px; height: 36px;
+  cursor: pointer;
+  position: relative;
+}
+#nav_switch span {
+  display: block;
+  width: 100%; height: 4px;
+  background: var(--accent-color);
+  position: absolute;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+}
+#nav_switch span:nth-child(1) { top: 0; }
+#nav_switch span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+#nav_switch span:nth-child(3) { bottom: 0; }
+#nav_switch.active span:nth-child(1) { transform: translateY(16px) rotate(-45deg); }
+#nav_switch.active span:nth-child(2) { opacity: 0; }
+#nav_switch.active span:nth-child(3) { transform: translateY(-16px) rotate(45deg); }
+
+/* === サイドメニュー === */
+#sidemenu {
+  position: fixed;
+  top: 0; right: -400px;
+  width: 400px;
+  height: 100vh;
+  background: var(--bg-secondary);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+  transition: right 0.4s ease;
+  padding-top: 80px;
+  overflow-y: auto;
+}
+#sidemenu.active { right: 0; }
+
+.sidemenu-header {
+  background: var(--accent-color);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+/* ==================== ヘッダー ==================== */
+header {
+    text-align: center;
+    padding: 120px 2rem 3rem;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* ==================== 検索バー ==================== */
+.search-container {
+    max-width: 1400px;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+}
+
+.search-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: 50px;
+    padding: 0.5rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.search-select {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 25px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.search-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    background: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-button:hover {
+    background: #5568d3;
+}
+
+/* ==================== グリッドレイアウト ==================== */
+main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ==================== ウィジェット共通 ==================== */
+.widget {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.widget:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.widget-header {
+    background: var(--bg-tertiary);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.widget-header h3 {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.widget-content {
+    padding: 1.5rem;
+}
+
+/* ==================== 天気ウィジェット ==================== */
+.weather-widget {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.weather-icon {
+    font-size: 4rem;
+}
+
+.weather-temp {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.weather-details {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.weather-details p {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ==================== カウントダウン ==================== */
+.countdown-item {
+    background: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.countdown-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.countdown-time {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ==================== カレンダー ==================== */
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-tertiary);
+}
+
+.calendar-day:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.calendar-day.today {
+    background: var(--accent-color);
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-day.other-month {
+    opacity: 0.3;
+}
+
+.calendar-header {
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+/* ==================== ポモドーロ（サイドメニュー内） ==================== */
+.pomodoro-display {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.timer-circle {
+    position: relative;
+    width: 250px;
+    height: 250px;
+}
+
+.timer-svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.timer-bg {
+    fill: none;
+    stroke: var(--bg-tertiary);
+    stroke-width: 10;
+}
+
+.timer-progress {
+    fill: none;
+    stroke: var(--accent-color);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 565.48;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.timer-text span {
+    font-size: 3rem;
+    font-weight: bold;
+    display: block;
+}
+
+.timer-text p {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.pomodoro-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.pomodoro-stats {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.pomodoro-info {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+}
+
+/* ==================== リンク集 ==================== */
+#linklist {
+    list-style: none;
+}
+
+#linklist li {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#linklist a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+#linklist a:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateX(5px);
+}
+
+#linkEditForm {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--border-color);
+}
+
+/* ==================== TODOリスト ==================== */
+#tasklist {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+#tasklist li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+#tasklist input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#tasklist input[type="checkbox"]:checked + span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.todo-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ==================== メモ帳 ==================== */
+#memoArea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+}
+
+.memo-info {
+    margin-top: 0.5rem;
+    text-align: right;
+    color: var(--text-secondary);
+}
+
+/* ==================== ボタン ==================== */
+.btn-primary, .btn-secondary, .btn-danger {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+}
+
+.btn-secondary {
+    background: var(--text-secondary);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+.small-btn {
+    padding: 0.5rem;
+    border: none;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.small-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* ==================== 入力フィールド ==================== */
+input[type="text"],
+input[type="datetime-local"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* ==================== モーダル ==================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.modal-close:hover {
+    color: var(--danger-color);
+}
+
+/* ==================== フッター ==================== */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: white;
+}
+
+/* ==================== レスポンシブ ==================== */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    #datetime {
+        display: none;
+    }
+    
+    #sidemenu {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+/* ==================== スクロールバー ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}

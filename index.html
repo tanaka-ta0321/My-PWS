@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My PortalWorkSpace - Optimized</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- ナビゲーション -->
+    <nav>
+        <div id="logo">
+            <h1>My <span>PWS<sup>&trade;</sup></span></h1>
+        </div>
+
+        <div id="nav-controls">
+            <button id="darkModeToggle" class="icon-button" title="ダークモード切替">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div id="datetime"></div>
+        </div>
+
+        <!-- ハンバーガーメニュー -->
+        <div id="nav_switch">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- サイドメニュー（ポモドーロタイマー） -->
+    <div id="sidemenu">
+        <div class="sidemenu-header">
+            <h2><i class="fas fa-stopwatch"></i> ポモドーロタイマー</h2>
+        </div>
+        <div class="sidemenu-content">
+            <div class="pomodoro-display">
+                <div class="timer-circle">
+                    <svg class="timer-svg" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="90" class="timer-bg"></circle>
+                        <circle cx="100" cy="100" r="90" class="timer-progress" id="timerProgress"></circle>
+                    </svg>
+                    <div class="timer-text">
+                        <span id="pomodoroTime">25:00</span>
+                        <p id="pomodoroStatus">作業時間</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pomodoro-controls">
+                <button id="pomodoroStart" class="btn-primary">
+                    <i class="fas fa-play"></i> 開始
+                </button>
+                <button id="pomodoroReset" class="btn-secondary">
+                    <i class="fas fa-redo"></i> リセット
+                </button>
+            </div>
+            <div class="pomodoro-stats">
+                <span>完了: <strong id="pomodoroCount">0</strong>回</span>
+            </div>
+            <div class="pomodoro-info">
+                <p><i class="fas fa-info-circle"></i> 25分作業 → 5分休憩</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヘッダー -->
+    <header>
+        <h1>My PortalWorkSpaceへようこそ！</h1>
+        <p>ここは自分専用にカスタム可能なポータルサイトです。</p>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main>
+        <!-- 検索バー -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <select id="searchEngine" class="search-select">
+                    <option value="google">Google</option>
+                    <option value="yahoo">Yahoo!</option>
+                    <option value="bing">Bing</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="ここで検索..." class="search-input">
+                <button id="searchButton" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- グリッドレイアウト -->
+        <div class="dashboard-grid">
+            
+            <!-- 天気ウィジェット -->
+            <div class="widget weather-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-cloud-sun"></i> 天気</h3>
+                </div>
+                <div class="widget-content">
+                    <div id="weatherLoading">読み込み中...</div>
+                    <div id="weatherContent" class="hidden">
+                        <div class="weather-main">
+                            <div class="weather-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="weather-temp">
+                                <span id="temperature">--</span>°C
+                            </div>
+                        </div>
+                        <div class="weather-details">
+                            <p id="weatherDescription">--</p>
+                            <p><i class="fas fa-map-marker-alt"></i> <span id="cityName">--</span></p>
+                            <p><i class="fas fa-tint"></i> 湿度: <span id="humidity">--</span>%</p>
+                            <p><i class="fas fa-wind"></i> 風速: <span id="windSpeed">--</span>m/s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- カウントダウンタイマー -->
+            <div class="widget countdown-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-clock"></i> カウントダウン</h3>
+                    <button id="addCountdownBtn" class="small-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="widget-content">
+                    <div id="countdownList">
+                        <!-- カウントダウンがここに追加される -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- カレンダー -->
+            <div class="widget calendar-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-calendar"></i> カレンダー</h3>
+                    <div class="calendar-controls">
+                        <button id="prevMonth" class="small-btn"><i class="fas fa-chevron-left"></i></button>
+                        <span id="currentMonth">2025年1月</span>
+                        <button id="nextMonth" class="small-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+
+            <!-- リンク集 -->
+            <div class="widget links-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-link"></i> 便利なリンク集</h3>
+                    <button id="linkeditbutton" class="small-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                <div class="widget-content">
+                    <ul id="linklist">
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-envelope"></i> Gmail
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://ku-port.sc.kogakuin.ac.jp/uprx/up/xu/xuk004/Xuk00401.xhtml" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-school"></i> Ku-port
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://study.ns.kogakuin.ac.jp/lms/corsColl/doLinkKyozaiTitle" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-book"></i> Ku-LMS
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-robot"></i> ChatGPT
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-youtube"></i> YouTube
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://app.slack.com/client/T0Y1Y62H2/C01CUQ2P9FF/" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-slack"></i> Slack
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://www.fe-siken.com/fekakomon.php" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-graduation-cap"></i> 基本情報過去問
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://www.udemy.com/" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-video"></i> Udemy
+                            </a>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="link-checkbox">
+                            <a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-code"></i> MDN Web Docs
+                            </a>
+                        </li>
+                    </ul>
+                    <div id="linkEditForm" class="hidden">
+                        <input type="text" id="newlinknametext" placeholder="リンク名">
+                        <input type="text" id="newlinkurltext" placeholder="URL">
+                        <div class="button-group">
+                            <button id="linkaddbutton" class="btn-primary">追加</button>
+                            <button id="linkremovebutton" class="btn-danger">選択したリンクを削除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODOリスト -->
+            <div class="widget todo-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-tasks"></i> TODOリスト</h3>
+                </div>
+                <div class="widget-content">
+                    <ul id="tasklist">
+                        <li><input type="checkbox"><span>HTML を学ぶ</span></li>
+                        <li><input type="checkbox"><span>CSS を学ぶ</span></li>
+                        <li><input type="checkbox"><span>JavaScript を学ぶ</span></li>
+                        <li><input type="checkbox"><span>Node.js を学ぶ</span></li>
+                    </ul>
+                    <div class="todo-input">
+                        <input type="text" id="newtasktext" placeholder="新しいタスクを追加">
+                        <button id="newtaskaddbutton" class="btn-primary">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button id="taskremovebutton" class="btn-danger btn-full">
+                        <i class="fas fa-trash"></i> 完了したタスクを削除
+                    </button>
+                </div>
+            </div>
+
+            <!-- メモ帳 -->
+            <div class="widget memo-widget">
+                <div class="widget-header">
+                    <h3><i class="fas fa-sticky-note"></i> メモ帳</h3>
+                    <button id="saveMemoBtn" class="small-btn">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+                <div class="widget-content">
+                    <textarea id="memoArea" placeholder="ここにメモを入力..."></textarea>
+                    <div class="memo-info">
+                        <small>自動保存されます</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RetasMaki</p>
+    </footer>
+
+    <!-- モーダル: カウントダウン追加 -->
+    <div id="countdownModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>カウントダウンを追加</h3>
+                <button class="modal-close" id="closeCountdownModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="countdownTitle" placeholder="イベント名（例: 期末試験）">
+                <input type="datetime-local" id="countdownDate">
+                <button id="saveCountdownBtn" class="btn-primary btn-full">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
