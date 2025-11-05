@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 public class server {
     
     private static final int PORT = 8000;
-    private static final String WEB_ROOT = "."; // カレントディレクトリ
+    private static final String WEB_ROOT = "public"; // カレントディレクトリ
     
     public static void main(String[] args) throws IOException {
         // HTTPサーバーを作成

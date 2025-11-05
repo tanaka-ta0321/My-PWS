@@ -109,47 +109,84 @@ searchInput.addEventListener('keypress', (e) => {
 // ==================== 天気ウィジェット ====================
 // 天気データを取得してウィジェットの表示を更新 API キーがなければデモデータを使う
 async function fetchWeather() {
-    const apiKey = storage.get('weatherApiKey') || 'demo';
+    const apiKey = storage.get('weatherApiKey');
+    const city = storage.get('weatherCity') || 'Tokyo';
     const loading = document.getElementById('weatherLoading');
     const content = document.getElementById('weatherContent');
-
+    
     try {
-        const weatherData = {
-            main: { temp: 15, humidity: 60 },
-            weather: [{ description: '晴れ', icon: '01d' }],
-            wind: { speed: 3.5 },
-            name: '東京'
-        };
-
-        // アイコン
+        let weatherData;
+        
+        // APIキーがある場合は実際のデータを取得
+        if (apiKey && apiKey !== 'demo') {
+            console.log('🌤️ 天気APIにリクエスト:', city);
+            const response = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ja`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: 天気データの取得に失敗`);
+            }
+            
+            weatherData = await response.json();
+            console.log('✅ 天気データ取得成功:', weatherData);
+        } else {
+            // デモデータ（APIキー未設定時）
+            console.log('ℹ️ デモモードで動作中');
+            weatherData = {
+                main: { temp: 15, humidity: 60 },
+                weather: [{ description: '晴れ (デモ)', icon: '01d' }],
+                wind: { speed: 3.5 },
+                name: '東京 (デモ)'
+            };
+            
+            // 設定方法のヒントを表示
+            if (!document.getElementById('weatherHint')) {
+                const hint = document.createElement('div');
+                hint.id = 'weatherHint';
+                hint.style.cssText = 'margin-top: 0.5rem; padding: 0.75rem; background: rgba(255,255,255,0.3); border-radius: 8px; font-size: 0.85rem;';
+                hint.innerHTML = `
+                    <div style="margin-bottom: 0.5rem;"><strong>💡 リアルタイム天気を表示する方法:</strong></div>
+                    <ol style="margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+                        <li>F12キーを押す</li>
+                        <li>「Console」タブを開く</li>
+                        <li>以下をコピペして実行:</li>
+                    </ol>
+                    <code style="display: block; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">localStorage.setItem('weatherApiKey', '"あなたのAPIキー"');</code>
+                `;
+                content.appendChild(hint);
+            }
+        }
+        
         const iconMap = {
             '01': 'fa-sun', '02': 'fa-cloud-sun', '03': 'fa-cloud',
             '04': 'fa-cloud', '09': 'fa-cloud-rain', '10': 'fa-cloud-sun-rain',
             '11': 'fa-bolt', '13': 'fa-snowflake', '50': 'fa-smog'
         };
-
+        
         const iconCode = weatherData.weather[0].icon.substring(0, 2);
         const iconClass = iconMap[iconCode] || 'fa-cloud';
-
-        // 反映
+        
         document.querySelector('.weather-icon i').className = `fas ${iconClass}`;
         document.getElementById('temperature').textContent = Math.round(weatherData.main.temp);
         document.getElementById('weatherDescription').textContent = weatherData.weather[0].description;
         document.getElementById('cityName').textContent = weatherData.name;
         document.getElementById('humidity').textContent = weatherData.main.humidity;
         document.getElementById('windSpeed').textContent = weatherData.wind.speed.toFixed(1);
-
+        
         loading.classList.add('hidden');
         content.classList.remove('hidden');
-    }
-    catch (error) {
-        // エラー表示
-        loading.textContent = 'データを取得できませんでした';
+        
+    } catch (error) {
+        console.error('❌ 天気取得エラー:', error);
+        loading.textContent = `データ取得エラー: ${error.message}`;
+        loading.style.color = '#ff6b6b';
     }
 }
 
 fetchWeather();
-setInterval(fetchWeather, 30 * 60 * 1000); // 30分毎に更新
+setInterval(fetchWeather, 30 * 60 * 1000); // 30分ごとに更新
+
 
 // ==================== カウントダウンタイマー ====================
 const countdownList = document.getElementById('countdownList');
